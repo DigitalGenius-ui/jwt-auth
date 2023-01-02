@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import Register from "./components/Register";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./components/Login";
+import Home from "./components/Home";
+import { useState } from "react";
 
 function App() {
+  const [isAuth, setIsAuth] = useState(
+    JSON.parse(localStorage.getItem("auth"))
+  );
+
+  console.log(isAuth);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Routes>
+          {isAuth && <Route path="/" element={<Home isAuth={isAuth} />} />}
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login setIsAuth={setIsAuth} />} />
+          <Route path="*" element={<Navigate to={"/login"} />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
